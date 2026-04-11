@@ -1,4 +1,4 @@
-# RunDealz 👟
+# Syfts 👟
 
 A running shoe deals website built with Next.js, Tailwind CSS, and Vercel. Find price drops, clearance sales, and coupon codes on popular running shoes.
 

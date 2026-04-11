@@ -26,7 +26,7 @@ export function DealsPage({ initialDeals }: { initialDeals: Deal[] }) {
           <div className="flex items-center gap-2">
             <span className="text-2xl">👟</span>
             <span className="text-xl font-extrabold tracking-tight">
-              Run<span className="text-emerald-400">Dealz</span>
+              Syfts<span className="text-emerald-400">.ai</span>
             </span>
           </div>
           <nav className="flex gap-6 text-sm font-semibold">
@@ -45,7 +45,7 @@ export function DealsPage({ initialDeals }: { initialDeals: Deal[] }) {
           for Running Shoes
         </h1>
         <p className="mt-2 text-base text-white/50">
-          Price drops, clearance finds &amp; coupon codes — updated daily.
+          We sift through thousands of prices so you don&apos;t have to.
         </p>
         <div className="mx-auto mt-7 max-w-md">
           <div className="flex overflow-hidden rounded-xl bg-white shadow-lg">
@@ -126,7 +126,7 @@ export function DealsPage({ initialDeals }: { initialDeals: Deal[] }) {
 
       {/* Footer */}
       <footer className="bg-gray-900 p-6 text-center text-xs text-gray-500">
-        RunDealz © {new Date().getFullYear()} · Affiliate Disclosure: We earn
+        Syfts © {new Date().getFullYear()} · Affiliate Disclosure: We earn
         commissions from qualifying purchases.
       </footer>
     </div>
