@@ -1,32 +1,69 @@
 import { NextResponse } from "next/server";
-
-// This route is called by Vercel Cron (see vercel.json).
-// Replace the placeholder logic with real price-checking calls.
-//
-// Example flow:
-// 1. Fetch your tracked shoes from DB
-// 2. For each shoe, call Keepa API or Amazon PA API to get current price
-// 3. If price < threshold, upsert a deal row in your DB
-// 4. Optionally send email alerts via Resend / Mailchimp
+import {
+  getAllActiveProducts,
+  upsertDeal,
+  upsertPriceHistory,
+  getTriggeredAlerts,
+  markAlertTriggered,
+} from "@/lib/db";
 
 export async function GET(request: Request) {
-  // Verify the request is from Vercel Cron (optional but recommended)
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // --- Replace with your real logic ---
   console.log("[cron] Checking prices...");
 
-  // Example: fetch from Keepa
-  // const shoes = await db.query("SELECT * FROM tracked_shoes");
-  // for (const shoe of shoes) {
-  //   const price = await keepa.getPrice(shoe.asin);
-  //   if (price < shoe.threshold) {
-  //     await db.query("INSERT INTO deals ...", [shoe, price]);
-  //   }
-  // }
+  const products = await getAllActiveProducts();
+  let checked = 0;
+  let updated = 0;
 
-  return NextResponse.json({ ok: true, checked: 0 });
+  for (const product of products) {
+    const currentPrice = await checkPrice(product.affiliateUrl);
+    if (currentPrice === null) continue;
+    checked++;
+
+    const discountPct = Math.round(
+      (1 - currentPrice / product.originalPrice) * 100
+    );
+    if (discountPct > 0) {
+      await upsertDeal(
+        product.id,
+        product.storeId,
+        currentPrice,
+        product.originalPrice,
+        product.affiliateUrl
+      );
+      updated++;
+    }
+
+    await upsertPriceHistory(product.id, currentPrice, product.storeId);
+  }
+
+  // Check and log triggered alerts
+  const triggered = await getTriggeredAlerts();
+  for (const alert of triggered) {
+    console.log(
+      `[cron] Alert triggered: ${alert.email} — ${alert.productName} at $${alert.currentPrice} (threshold: $${alert.priceThreshold})`
+    );
+    // TODO: Send email via Resend / Mailchimp
+    await markAlertTriggered(alert.alertId);
+  }
+
+  console.log(
+    `[cron] Done. Checked: ${checked}, Updated: ${updated}, Alerts: ${triggered.length}`
+  );
+
+  return NextResponse.json({
+    ok: true,
+    checked,
+    updated,
+    alertsTriggered: triggered.length,
+  });
+}
+
+// Placeholder — replace with Keepa API or Amazon PA API call
+async function checkPrice(_url: string): Promise<number | null> {
+  return null;
 }

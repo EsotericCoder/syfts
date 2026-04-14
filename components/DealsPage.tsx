@@ -20,23 +20,6 @@ export function DealsPage({ initialDeals }: { initialDeals: Deal[] }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-gray-950 text-white">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">👟</span>
-            <span className="text-xl font-extrabold tracking-tight">
-              Syfts<span className="text-emerald-400">.ai</span>
-            </span>
-          </div>
-          <nav className="flex gap-6 text-sm font-semibold">
-            <a href="#" className="text-white/60 hover:text-white transition">About</a>
-            <a href="#" className="text-white/60 hover:text-white transition">Submit Deal</a>
-            <a href="#alerts" className="text-emerald-400">Alerts</a>
-          </nav>
-        </div>
-      </header>
-
       {/* Hero */}
       <section className="bg-gradient-to-br from-gray-950 to-gray-800 px-6 py-14 text-center text-white">
         <h1 className="text-4xl font-black tracking-tight md:text-5xl">
@@ -123,12 +106,6 @@ export function DealsPage({ initialDeals }: { initialDeals: Deal[] }) {
           </div>
         )}
       </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 p-6 text-center text-xs text-gray-500">
-        Syfts © {new Date().getFullYear()} · Affiliate Disclosure: We earn
-        commissions from qualifying purchases.
-      </footer>
     </div>
   );
 }

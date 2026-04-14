@@ -1,7 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import { Deal } from "@/lib/types";
-import Image from "next/image";
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -12,7 +12,7 @@ function timeAgo(iso: string) {
 }
 
 export function DealCard({ deal }: { deal: Deal }) {
-  return (
+  const card = (
     <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white transition hover:-translate-y-1 hover:shadow-xl">
       {deal.hot && (
         <span className="absolute left-3 top-3 z-10 rounded-full bg-red-500 px-2.5 py-1 text-[10px] font-bold text-white">
@@ -24,7 +24,6 @@ export function DealCard({ deal }: { deal: Deal }) {
       </span>
 
       <div className="relative h-44 bg-gray-100">
-        {/* Replace with real images — using placeholder color blocks for now */}
         <div className="flex h-full items-center justify-center text-4xl opacity-30">
           👟
         </div>
@@ -55,7 +54,8 @@ export function DealCard({ deal }: { deal: Deal }) {
             href={deal.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-lg bg-gray-900 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-emerald-400 hover:text-gray-900"
+            onClick={(e) => e.stopPropagation()}
+            className="relative z-10 rounded-lg bg-gray-900 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-emerald-400 hover:text-gray-900"
           >
             Get Deal →
           </a>
@@ -63,4 +63,10 @@ export function DealCard({ deal }: { deal: Deal }) {
       </div>
     </div>
   );
+
+  if (deal.slug) {
+    return <Link href={`/shoes/${deal.slug}`}>{card}</Link>;
+  }
+
+  return card;
 }
